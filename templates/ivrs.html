@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ivrs.css">
+    <title>IVRS</title>
+</head>
+<body>
+    <div class="contan">
+        <div id="userinfo">
+            <div class="profile"><img src="user.png" alt=""></div>
+            <div class="name">Name: <span id="nameCall">Brian Copper</span></div>
+            <div class="phonenumber">Ph. No: +91 <span id="phoneCall"> XXXXX XXXXXX</span></div>
+        </div>
+    
+        <div class="prediction">
+            <p>Predicted Routing: <span id="predictionCall">Emergency</span></p>       
+        </div>
+        
+        <div class="input">
+            <p>User Input: <span id="inputopt"></span></p>
+        </div>
+    
+        <div class="result">
+            <p><span id="resultCall">Waiting...</span></p>       
+        </div>
+    
+    
+        <div class="transcriterWrap">
+            <div class="transcripter">
+                <p><span id="message">User's Audio to Text is....</span> </p>
+            </div>
+        </div>
+    
+    
+    
+        <div class="buttonDecider">
+            <div class="buttons">
+                <a href="ivrs2.html"><button id="fwdBtn">Forward Call</button></a>
+                <a href="ivrs2.html"><button id="resultBtn">Disconnect Call</button></a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="./ivrs.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</body>
+</html>

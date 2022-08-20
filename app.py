@@ -8,12 +8,14 @@ from twilio.twiml.voice_response import VoiceResponse, Start
 from twilio.rest import Client
 import vosk
 import time
-from flask import url_for
+from flask import url_for, jsonify
+from flask import render_template
 import flask
 import pickle
 import joblib
 from spam_lookup import lookup
 from number_validity import isValid
+import unicodedata
 
 app = Flask(__name__)
 sock = Sock(app)
@@ -21,9 +23,29 @@ twilio_account_sid = "ACb570e0d0321934733824f7c7f8c88c5c"
 twilio_auth_token = "9f20b219969c3ad2b6ce0da45db9dac9"
 twilio_client = Client(twilio_account_sid, twilio_auth_token)
 model = vosk.Model('model')
-# ml_model_file = open('naive_bayes_classifier.pkl', 'rb')
-# ml_model = joblib.load(ml_model_file)
 
+database = ""
+cursor = ""
+def connect_database():
+    global database, cursor
+    import psycopg2
+    db_url = "postgresql://srikanth:5zx_u0fv14b4BLPnCs4_8A@free-tier12.aws-ap-south-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full&options=--cluster%3Ddread-macaw-1079"
+    database = psycopg2.connect(db_url, application_name="$ docs_simplecrud_psycopg2") 
+    cursor = database.cursor()    
+
+def add_to_database(temp_msg, selected_option, number, prediction):
+    # message1 = unicodedata.normalize('NFKD', temp_msg).encode('ascii', 'ignore')
+    message1 = temp_msg
+    # temp_msg.replace("\'", "\\'")
+    message2 = ""
+    for i in range(len(message1)):
+        if message1[i] == "\'":
+            message2 += "\\" + "\'"
+        else:
+            message2 += message1[i]
+    sql_query = f'INSERT INTO call_reports (mobile_number, transcript, selected_option, prediction) values(\'{number[3:]}\', \'{message2}\', \'{selected_option}\', \'{prediction}\');'
+    cursor.execute(sql_query)
+    database.commit()
 
 CL = '\x1b[0K'
 BS = '\x08'
@@ -32,6 +54,9 @@ number = ""
 
 temp_msg = ""
 
+should_stream = True
+
+selected_option = ""
 
 def classify(text):
     #load classifier
@@ -50,21 +75,48 @@ def twiml(resp):
     resp.headers['Content-Type'] = 'text/xml'
     return resp
 
+@app.route('/home', methods=['GET'])
+def home():
+    global selected_option, number, temp_msg
+    return render_template("ivrs.html")
+
+@app.route('/get-call-details', methods=['GET'])
+def get_details():
+    global temp_msg, selected_option, number
+    response = {
+        'message': temp_msg,
+        'mob_number': number,
+        'selected_option': selected_option
+    }
+    return jsonify(response)
+
 @app.route('/call', methods=['POST'])
 def call():
     """Accept a phone call."""
-    global number
+    global number, should_stream, temp_msg
+    temp_msg = ""
+    # should_stream = True
     response = VoiceResponse()
     start = Start()
     start.stream(url=f'wss://{request.host}/stream')
     response.append(start)
     response.say(
         "Thank you for calling Madhya Pradesh Police. Please speak about your problem in 20 seconds")
-    response.pause(length=20)
+    response.pause(length=10)
+    # should_stream = False
     print(f'Incoming call from {request.form["From"]}')
     number = request.form["From"]
     print(number)
     
+    '''caller-name
+    details = twilio_client.lookups \
+                     .v1 \
+                     .phone_numbers(number) \
+                     .fetch(add_ons=['nomorobo_spamscore']) \
+                     .fetch(type=["caller-name"])
+                     
+    print(details.caller_name)
+    print(details.add_ons)'''
     
     #string to integer conversion, excluding +91
     number_parse = number[3:]
@@ -82,7 +134,8 @@ def call():
             ) as g:
                 g.say(message="Thanks for calling MP Police. " +
                     "Please press 1 for emergency." +
-                    "Press 2 for help." + "Press 3 for inquiry.", loop=3)
+                    "Press 2 for help." + "Press 3 for inquiry.", loop=1)
+                
                 
     else:
         response.say("Not a valid number")
@@ -90,43 +143,31 @@ def call():
     return str(response), 200, {'Content-Type': 'text/xml'}
 
 
-# menu
 
 @app.route('/call/menu', methods=['POST'])
 def menu():
-    global temp_msg
+    global temp_msg, selected_option
+    
     selected_option = request.form['Digits']
     option_actions = {'1': _emergency,
                       '2': _help,
                       '3': _inquiry}
     
-    x = classify(temp_msg)
-    # theft -> help
-    print('model prediction:',x)
+    prediction = classify(temp_msg)
+    print('model prediction:',prediction)
+    print(temp_msg)
+    add_to_database(selected_option=selected_option, temp_msg=temp_msg, number=number, prediction=prediction)
         
-    # print(ml_model.predict([temp_msg]))
-    # if option_actions.has_key(selected_option)
     if selected_option in option_actions:
-        if x == 'Theft' and selected_option == '2':
+        if prediction == 'Theft' and selected_option == '2':
             return str(option_actions[selected_option]()), 200, {'Content-Type':'text/xml'}
-        if  x == 'Emergency' and selected_option == '1':
+        if prediction == 'emergency' and selected_option == '1':
             return str(option_actions[selected_option]()), 200, {'Content-Type':'text/xml'}
-        if x == 'Inquiry' and selected_option == '3':
+        if prediction == 'Inquiry' and selected_option == '3':
             return str(option_actions[selected_option]()), 200, {'Content-Type':'text/xml'}
-            
-        #return twiml(response)
         response = VoiceResponse()
         response.say("Hello from the outside")
-        return str(response), 200, {'Content-Type', 'text/xml'}
-    
-    #return _emergency()
-        # '''if option_actions.has_key(selected_option):
-
-        #     response = VoiceResponse()
-
-        #     option_actions[selected_option](response)
-
-        #     return twiml(response)'''
+        return str(response), 200, {'Content-Type', 'text/xml'}    
     return _redirect_call()
 
 
@@ -161,22 +202,18 @@ def _redirect_call():
 
     return twiml(response)
 
-
 @sock.route('/stream')
 def stream(ws):
-    global number, temp_msg
+    global number, temp_msg, should_stream
     response = VoiceResponse()
     """Receive and transcribe audio stream."""
     rec = vosk.KaldiRecognizer(model, 16000)
-    start = time.time()
     while True:
         message = ws.receive()
         packet = json.loads(message)
         if packet['event'] == 'start':
             print('Streaming is starting')
         elif packet['event'] == 'stop':
-            # print('\n' + temp_msg)
-            # print(number)
             print('\nStreaming has stopped')
         elif packet['event'] == 'media':
             audio = base64.b64decode(packet['media']['payload'])
@@ -185,14 +222,15 @@ def stream(ws):
             if rec.AcceptWaveform(audio):
                 r = json.loads(rec.Result())
                 print(CL + r['text'] + ' ', end='', flush=True)
-                temp_msg += CL + r['text'] + ' '
+                temp_msg +=  r['text']
             else:
                 r = json.loads(rec.PartialResult())
                 print(CL + r['partial'] + BS *
                       len(r['partial']), end='', flush=True)
-                temp_msg += CL + r['partial'] + BS * len(r['partial'])
-
+                temp_msg += r['partial']
+                # temp_msg += temp_msg[:(len(temp_msg) - len(r['partial']))]
 if __name__ == '__main__':
+    connect_database()
     from pyngrok import ngrok
     port = 5000
     public_url = ngrok.connect(port, bind_tls=True).public_url

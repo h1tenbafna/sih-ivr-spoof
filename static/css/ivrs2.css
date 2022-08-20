@@ -1,0 +1,65 @@
+:root {
+    --box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+  }
+
+*{
+    padding: 0;
+    border: 0;
+    text-decoration: none;
+    transition: all 0.2s linear;
+    box-sizing: border-box;
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+  }
+  
+
+body{
+    background-color: #2f846b;
+}
+
+
+.contan{
+    padding: 15px;
+    margin: 15px 20px;
+    background-color: rgb(236, 248, 245);
+    border-radius: 5px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    height: auto;
+    width: auto;
+    box-shadow: var(--box-shadow);
+
+
+}
+.head{
+    text-align: center;
+}
+input[type="text"],input[type="email"],input[type="number"],input[type="date"]{
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+fieldset{
+    border:1px solid #ccc;
+    padding:15px;
+}
+input[type="submit"]{
+    border-radius: 2rem;
+    width:50%;
+    height:50px;
+    background-color: #14382e;
+    color: #a1decc;
+    border:none;
+    margin-left: 25vw;
+}
+input[type="submit"]:hover{
+    background-color: #2f846b;
+    color: white;
+    cursor: pointer;
+    
+}

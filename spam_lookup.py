@@ -1,7 +1,7 @@
 from xlrd import open_workbook
 def lookup(test_number):
     flag = 0
-    book = open_workbook("new.xls")
+    book = open_workbook("new.xls") #xlsx   
     sheet = book.sheet_by_index(0)
     #test_number = 7083022822
     for row in range(sheet.nrows):

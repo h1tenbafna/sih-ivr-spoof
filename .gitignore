@@ -2,9 +2,6 @@ News Articles
 dbpassword.txt
 import pandas as pd.py
 IVR.py
-*.css
-*.html
-*.js
 *.xls
 *.xlsx
 *.exe

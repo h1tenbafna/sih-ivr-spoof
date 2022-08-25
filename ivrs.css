@@ -1,0 +1,127 @@
+:root {
+    --box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    text-decoration: none;
+    transition: all 0.2s linear;
+    box-sizing: border-box;
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+}
+  
+
+body{
+    background-color: rgb(236, 248, 245);
+}
+
+#userinfo{
+    font-size: 1.5rem;
+    background-color: #a1decc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    padding: 2rem 2rem;
+    margin:2rem 30vw;
+    margin-bottom: 1rem;
+    box-shadow: var(--box-shadow);
+}
+.profile img{
+    width: 2.7rem;
+    height: auto;
+}
+
+.prediction{
+    background-color:#14382e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+    margin: 0 35vw;
+    font-size: 1.5rem;
+    color:#a1decc;
+    border-radius: 1rem;
+    box-shadow: var(--box-shadow);
+}
+.input{
+    background-color:#14382e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+    margin: 1rem 35vw;
+    font-size: 1.5rem;
+    color:#a1decc;
+    border-radius: 1rem;
+    box-shadow: var(--box-shadow);
+}
+.result{
+    background-color:#14382e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+    margin: 1rem 35vw;
+    font-size: 1.5rem;
+    color:#a1decc;
+    border-radius: 1rem;
+    box-shadow: var(--box-shadow);
+    /* position: absolute; */
+    /* right: -110%; */
+}
+/* .result.active{
+    position: relative;
+    right: 0;
+} */
+
+.transcriterWrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.transcripter{
+    color: black;
+    font-size: 2rem;
+    height: 10vw;
+    width: 40vw;
+    background-color: #a1decc;
+    border-radius: 1rem;
+    box-shadow: var(--box-shadow);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+button{
+    color: white;
+    padding: 1rem 2rem;
+    background-color: #14382e;
+    border-radius: 2rem;
+    margin: 0.9rem 2rem;
+    font-size: 1.5rem;
+    box-shadow: var(--box-shadow);
+}
+
+button:hover{
+    background-color: #2f846b;
+    color: white;
+    
+}
+
+

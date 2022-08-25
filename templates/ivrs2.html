@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ivrs2.css">
+    <title>Info To Dataset</title>
+</head>
+<body>
+    <div class="contan">
+        <!-- required field to be added in all inputs -->
+        <form action="ivrs.html">
+            <h1 class="head">Caller Information</h1>
+            <hr>
+            <h2>Contact devlopment:</h2>
+            <p>Name:<input type="text" name="name"><span id="dname"></span></p>
+            <p>Phone Number: <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"></p>
+            <p>Transcript:
+                <textarea name="transcript" id="add" cols="50" rows="5"></textarea>
+            </p>
+            <!-- <p>e mail:<input type="email" name="email" id="email" placeholder="something@something.something"></p> -->
+            <!-- <p>pincode: <input type="number" name="pincode" id = "pin" placeholder="6 digits"></p> -->
+            <hr>
+            <h2>Attandance Detail:</h2>
+            <p>Call type:   <select name="card" id="card">
+                <option value="">--select--</option>
+                <option value="emergency">Emergency</option>
+                <option value="theft">Theft</option>
+                <option value="enquiry">Enquiry</option>
+                <option value="Spam">Spam</option>
+            </select></p>
+            <p>Duration of Call: <input type="time" class="card_number" placeholder="enter the 16 digit card number"></p>
+            <p>Date: <input type="date" class="exp_date"></p>
+            <p><center><input type="submit" class="button" value="Submit"></center></p>
+            
+
+        </form>
+    </div>
+
+
+
+    <script src="ivrs.js"></script>
+</body>
+</html>

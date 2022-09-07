@@ -1,5 +1,5 @@
-# sih-ivr-spoof
-This code sample is the main app file for the problem statement: "System for Identification of system generated, blank & Spoof calls landing at Dial 100 Police control room"
+# SPOOFex
+Problem statement: "System for Identification of system generated, blank & Spoof calls landing at Dial 100 Police control room"
 1. It's a app.py file of python backed flask framework, Twilio Client API is called to fetch client details and recieve calls on a US based trial number offered by Twilio. Since the call is recieved only on a public host & 
 the flask app runs on a local host 5000, so we leverage ngrok, cross-platform apllication which exposes a local development server to the internet and divert the traffic, i.e incoming calls recieved onto it. 
 2. Once the user calls on the given number, initially before the call is connected the number is verified whether it's a legit Indian number or not, we used Regular expression library of python for this and 
@@ -11,3 +11,8 @@ then "the spam_lookup" function lookups into the live spam database to check if 
 7. Simultaneously, the user is asked to enter a single digit input such as 1 for Emergency, 2 for Inquiry and 3 for Complaint. So after mapping both the results i.e user input and model prediction,  a final output is given and the call is routed to the respective department and if found spam, the police can add the number into the spamlist.
 8. All the data such as, phone number, transcript, user input, time and model prediction are stored into the live database (PostgreSQL). 
 9. So on the front webpage, model prediction, user input, department to which the call is forwaded to and the phone number are displayed with extra features such as instructions for the operator and add to spam button.
+
+# Flowchart
+![3](https://user-images.githubusercontent.com/87855947/188958305-472ffee6-c25a-4936-b052-ba9e32316b15.jpg)
+
+# Stack

@@ -17,8 +17,8 @@ from number_validity import isValid
 from Numbers_Routing import getRandomEmergency, getRandomHelp, getRandomInquiry
 app = Flask(__name__)
 sock = Sock(app)
-twilio_account_sid = "ACb570e0d0321934733824f7c7f8c88c5c"
-twilio_auth_token = "9f20b219969c3ad2b6ce0da45db9dac9"
+twilio_account_sid = ""
+twilio_auth_token = ""
 twilio_client = Client(twilio_account_sid, twilio_auth_token)
 model = vosk.Model('model')
 
@@ -30,7 +30,7 @@ prediction = "asdfasdfasdf"
 def connect_database():
     global database, cursor
     import psycopg2
-    db_url = "postgresql://srikanth:5zx_u0fv14b4BLPnCs4_8A@free-tier12.aws-ap-south-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full&options=--cluster%3Ddread-macaw-1079"
+    db_url = ""
     database = psycopg2.connect(db_url) 
     cursor = database.cursor()    
 

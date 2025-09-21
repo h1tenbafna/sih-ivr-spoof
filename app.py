@@ -137,7 +137,7 @@ def call():
     print(number)
     
     #string to integer conversion, excluding +91
-    print(number_parse) #7083022822
+    print(number_parse) 
     print(isValid(number_parse))
     with response.gather(
         num_digits=1, action=url_for('menu'), method="POST"

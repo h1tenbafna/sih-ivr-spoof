@@ -120,7 +120,7 @@ def call():
     
     #string to integer conversion, excluding +91
     number_parse = number[3:]
-    print(number_parse) #7083022822
+    print(number_parse) 
     
     if isValid(number_parse):
         t = lookup(int(number_parse))
@@ -176,7 +176,7 @@ def _emergency():
     response = VoiceResponse()
     response.say("You have called to emergency Department")
     # legit number routing
-    response.dial("+917083022822")
+    response.dial("+912345678901")
     #response.hangup()
     return response
 
@@ -185,13 +185,13 @@ def _help():
     response = VoiceResponse()
     response.say("You have called to help Department")
     #number
-    response.dial("+918104241304")
+    response.dial("+913456789012")
     return response
 
 def _inquiry():
     response = VoiceResponse()
     response.say("You have called to inquiry Department")
-    response.dial("+918454861073")
+    response.dial("+911234567890")
     return response
 
 
